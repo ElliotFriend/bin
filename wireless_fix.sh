@@ -1,33 +1,73 @@
 #!/bin/bash
+
 # I have this really stupid wireless card in my desktop
 # It's a Ralink chipset -- RT3062
-# It really doesn't like to work with Linux (Ubuntu-based distros, at least, it appears)
+# It really doesn't like to work with Linux (Ubuntu-based distros,
+# at least, it appears)
 # I've got the file in a safe location, and this is the
 # process to make everything work.
 # After this is done, you should reboot.
 # Your wireless interface will now be called ra0, rather than wlan0
+# Keep your source directory, after a kernel update, you'll have to recompile
+# and reinstall the driver
+
+## If you're having trouble downloading the driver from below, follow these
+## instructions:
+###############
+## Download the driver package from the Ralink website:
+##	http://www.mediatek.com/_en/07_downloads/01-1_windowsDetail.php?sn=5019
+## Extract the package and change into the new directory
+## Modify os/linux/config.mk and set:
+##	HAS_WPA_SUPPLICANT=y
+##	HAS_NATIVE_WPA_SUPPLICANT_SUPPORT=y
+## Save and follow along with the rest of the script
+
+
+DRIVER_DIR=$HOME/Downloads/drivers
+SOURCE_DIR=$DRIVER_DIR/rt3062_prepared
 
 # reinstall linux headers, and some build tools
+echo "reinstalling build packages"
 sudo apt-get install --reinstall linux-headers-$(uname -r) build-essential dkms
 
 # Make sure that we have a directory to work in, and then cd there
-if [ -d $HOME/Downloads/drivers ] ; then
-    echo "directory exists, moving on"
+if [ -d $DRIVER_DIR ] ; then
+    echo "drivers directory exists"
 else
-    mkdir $HOME/Downloads/drivers
+    mkdir $DRIVER_DIR
 fi
-cd $HOME/Downloads/drivers
+echo "changing to drivers directory"
+cd $DRIVER_DIR
 
-# Download the driver file, untar it
-wget http://elliot.voris.me/downloads/drivers/rt3062_prepared.tar.gz
-mkdir rt3062_prepared
-cd rt3062_prepared
-tar --strip-components=1 -zxvf ../rt3062_prepared.tar.gz
+# If the source directory doesn't exist, download the file and extract it
+if [ -d $SOURCE_DIR ] ; then
+    # otherwise, just cd there
+    echo "source directory exists"
+    echo "changing to source directory"
+    cd $SOURCE_DIR
+    echo "re-installing"
+    sudo make clean
+    sudo make
+    sudo make install
+else
+    echo "downloading source archive"
+    wget http://download.elliotfriend.com/drivers/rt3062_prepared.tar.gz
+    mkdir $SOURCE_DIR
+    echo "changing to source directory"
+    cd $SOURCE_DIR
+    tar --strip-components=1 -zxvf ../rt3062_prepared.tar.gz
+    echo "installing"
+    # make and install the driver
+    sudo make
+    sudo make install
+fi
 
+# If it the old driver is not blacklisted, do it
+if grep -q "blacklist rt2800pci" /etc/modprobe.d/blacklist.conf
+then
+    echo "old driver already blacklisted"
+else
+    sudo echo "blacklist rt2800pci" | sudo tee -a /etc/modprobe.d/blacklist.conf
+fi
 
-# Install the newly downloaded driver
-make
-sudo make install
-
-# Blacklist the old driver, so that we don't get in trouble
-echo "blacklist rt2800pci" | sudo tee -a /etc/modprobe.d/blacklist.conf
+echo "all done"
