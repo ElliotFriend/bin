@@ -16,5 +16,6 @@ try:
     # Sanity check
     if open_file.closed == False:
         open_file.close()
+        
 except KeyboardInterrupt:
-    sys.exit()
+    sys.exit("\nCaught Interrupt Signal")
