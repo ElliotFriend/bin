@@ -34,6 +34,7 @@ sudo apt-get install --reinstall linux-headers-$(uname -r) build-essential dkms
 if [ -d $DRIVER_DIR ] ; then
     echo "drivers directory exists"
 else
+    echo "making drivers directory"
     mkdir $DRIVER_DIR
 fi
 echo "changing to drivers directory"
@@ -55,6 +56,7 @@ else
     mkdir $SOURCE_DIR
     echo "changing to source directory"
     cd $SOURCE_DIR
+    echo "extracting driver source code"
     tar --strip-components=1 -zxvf ../rt3062_prepared.tar.gz
     echo "installing"
     # make and install the driver
@@ -62,7 +64,7 @@ else
     sudo make install
 fi
 
-# If it the old driver is not blacklisted, do it
+# If the old driver is not blacklisted, do it
 if grep -q "blacklist rt2800pci" /etc/modprobe.d/blacklist.conf
 then
     echo "old driver already blacklisted"
@@ -70,4 +72,4 @@ else
     sudo echo "blacklist rt2800pci" | sudo tee -a /etc/modprobe.d/blacklist.conf
 fi
 
-echo "all done"
+echo "all done. reboot and enjoy your internets"
