@@ -12,7 +12,7 @@
 # useful when paired with an alias of it's own. The alias I'm currently
 # using to run this script is:
 #
-# alias aa='~/bin/add_alias.py && source ~/.bash_aliases'
+# alias aa='~/bin/add-alias.py && source ~/.bash_aliases'
 #
 # This runs the script, and then sources the file, so that the alias is
 # immediately available.
