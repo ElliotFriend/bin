@@ -9,4 +9,3 @@ for num in range(f_seq[0], f_end):
     f_seq.append(f_seq[-1] + f_seq[-2])
 
 print f_seq
-print "length is ", len(f_seq)
