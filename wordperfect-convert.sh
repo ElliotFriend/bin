@@ -35,11 +35,13 @@ if [ -d $IN_DIR ]; then
     # Check to make sure that LibreOffice isn't running
     if ! pgrep -q soffice ; then
         # Convert those dang things!
+        # We're redirecting stderr because each file appeared
+        # to give a false alarm. We'll see how it goes lol
         $LO_BIN/soffice --headless --convert-to docx --outdir $OUT_DIR $IN_DIR/* 2> /dev/null
     else
         echo "LibreOffice appears to be running already"
         echo "Please quit (Cmd-Q) LibreOffice, and try again"
     fi
 else
-    echo "`echo $IN_DIR`: does not exist"
+    echo "`echo $IN_DIR`: directory does not exist"
 fi
