@@ -25,7 +25,7 @@ IN_DIR=$HOME/Desktop/wordperfect-documents
 OUT_DIR=$HOME/Desktop/converted-documents
 
 # Check to see which brand of *nix w'ere working with
-if [ `uname -o` == "GNU/Linux" ]; then
+if [ `uname -s` == "Linux" ]; then
     # This is where the LibreOffice executable lives
     LO_EXEC=/usr/bin/libreoffice
 elif [ `uname -s` == "Darwin" ]; then
