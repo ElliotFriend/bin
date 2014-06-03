@@ -27,10 +27,6 @@
 DRIVER_DIR=$HOME/drivers
 SOURCE_DIR=$DRIVER_DIR/rt3062_prepared
 
-# reinstall linux headers, and some build tools
-echo "reinstalling build packages"
-sudo apt-get install --reinstall linux-headers-$(uname -r) build-essential dkms
-
 # Make sure that we have a directory to work in, and then cd there
 if [ -d $DRIVER_DIR ] ; then
     echo "drivers directory exists"
@@ -73,4 +69,8 @@ else
     sudo echo "blacklist rt2800pci" | sudo tee -a /etc/modprobe.d/blacklist.conf
 fi
 
-echo "all done. reboot and enjoy your internets"
+# Modprobe the new driver
+echo "probing for the new driver"
+sudo modprobe rt3562sta
+
+echo "all done. enjoy your internets"
