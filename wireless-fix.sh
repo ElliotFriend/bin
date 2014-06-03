@@ -16,14 +16,15 @@
 ###############
 ## Download the driver package from the Ralink website:
 ##	http://www.mediatek.com/_en/07_downloads/01-1_windowsDetail.php?sn=5019
-## Extract the package and change into the new directory
+## Extract the package into $HOME/drivers/rt3062_prepared
+## and change into the new directory
 ## Modify os/linux/config.mk and set:
 ##	HAS_WPA_SUPPLICANT=y
 ##	HAS_NATIVE_WPA_SUPPLICANT_SUPPORT=y
 ## Save and follow along with the rest of the script
 
 
-DRIVER_DIR=$HOME/Downloads/drivers
+DRIVER_DIR=$HOME/drivers
 SOURCE_DIR=$DRIVER_DIR/rt3062_prepared
 
 # reinstall linux headers, and some build tools
