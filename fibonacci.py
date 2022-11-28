@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys
 
@@ -13,4 +13,4 @@ while len(f_seq) <= int(sys.argv[1]):
     f_seq.append(f_seq[-1] + f_seq[-2])
 
 # Print the list out for all to see.
-print f_seq
+print(f_seq)
